@@ -1,0 +1,23 @@
+{% extends 'learning_logs/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="login-container">
+    <h2>Login</h2>
+    <form action="{% url 'auth_app:login' %}" method="POST">
+        {% csrf_token %}
+        <div class="input-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <input type="hidden" name="next" value="{% url 'learning_logs:topics' %}">
+        <button type="submit">Login</button>
+    </form>
+    <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="{% url 'auth_app:register' %}"
+        class="link-danger">Register</a></p>
+</div>
+{% endblock content %}
