@@ -10,8 +10,14 @@ class Topic(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
+    @property
+    def uppercase(self):
+        return self.text.capitalize()
+
+
     def __str__(self):
         return self.text
+
     
 
 class Entry(models.Model):
