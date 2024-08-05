@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from .models import Topic,Entry
 from .forms import TopicForm,EntryForm 
 from django.http import HttpResponseRedirect,Http404
@@ -18,7 +18,7 @@ def topics(request):
 
 @login_required
 def topic(request, topic_id):
-    topic = Topic.objects.get(id=topic_id)
+    topic = get_object_or_404(Topic, id=topic_id)
     if topic.owner != request.user:
         raise Http404
     entries = topic.entry_set.order_by('-date_added')
@@ -57,9 +57,10 @@ def new_entry(request, topic_id):
     context = {'topic':topic, 'form':form}
     return render(request, 'learning_logs/new_entry.html', context)
 
+
 @login_required
 def edit_entry(request, entry_id):
-    entry = Entry.objects.get(id=entry_id)
+    entry = get_object_or_404(Entry, id=entry_id)
     topic = entry.topic
     if topic.owner != request.user:
         raise Http404
@@ -69,9 +70,20 @@ def edit_entry(request, entry_id):
         form = EntryForm(instance=entry, data=request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('learning_logs:topic', args=[entry_id]))
+            return HttpResponseRedirect(reverse('learning_logs:topic', args=[topic.id]))
         
-    context = {'entry':entry, 'topic':topic, 'form':form}
+    context = {'entry': entry, 'topic': topic, 'form': form}
     return render(request, 'learning_logs/edit_entry.html', context)
+
+
+
+def delete_entry(request, entry_id):
+    entry = get_object_or_404(Entry, id=entry_id)
+    topic = entry.topic
+    if topic.owner != request.user:
+        raise Http404
+    else:
+        entry.delete()
+        return HttpResponseRedirect(reverse('learning_logs:topic', args=[topic.id]))
         
 
