@@ -3,10 +3,17 @@
 
 {% block content %}
 <h1>My topics</h1>
+
 <ul>
+    {% if status == '1' %}
+    <div class="alert alert-success" role="alert">
+        A new topic has been created successfully
+    </div>
+    {% endif %}
+
     {% for topic in topics %}
         <li style="list-style:none;"><a style="text-decoration:none;color:black;font-weight:700;font-size:25px;" href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a></li>
-    {% empty  %}
+    {% empty %}
         <h1>No topic yet!</h1>
     {% endfor %}
 </ul>
