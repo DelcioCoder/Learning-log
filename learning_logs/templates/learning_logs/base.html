@@ -30,6 +30,7 @@
                     <img id="user-icon" src="{% static 'images/user.svg' %}" alt="user icon" data-username="{{ user.username }}">
                   </h5>
                   <a class="btn btn-warning" href="{% url 'auth_app:logout' %}">logout</a>
+                  <a class="btn btn-danger" href="{% url 'auth_app:changepassword' %}">changepass</a>
                 {% else %}
                   <a class="btn btn-warning" href="{% url 'auth_app:login' %}">login</a>
                 {% endif %}
